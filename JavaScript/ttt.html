@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe</title>
+
+    <style>
+        body {
+            font-family: 'Calibri';
+            font-weight: bold;
+        }
+
+        span {
+            color: rgb(46, 70, 141);
+        }
+
+        .top-txt {
+            display: block;
+            text-align: left;
+            width:450px;
+        }
+
+        .right-align {
+            float: right;
+            padding-left: 4px;
+        }
+
+        .ttt-lines {
+            display: grid;
+            grid-template-columns: fit-content(30%) fit-content(30%) fit-content(30%);
+            grid-template-rows: fit-content(30%) fit-content(30%) fit-content(30%);
+            height: auto;
+            width: auto;
+        }
+
+        .boxes {
+            background-color: black;
+            border: rgba(195, 200, 213, 0.75);
+            border-style: solid;
+            height: 150px;
+            text-align: center;
+            width: 150px;
+        }
+
+        svg {
+            cursor: pointer;
+            font-family: 'Calibri';
+            font-weight: bold;
+            font-size: 300%;
+            height: 100%;
+            text-align: center;
+            width: 100%;
+        }
+
+        text {
+            fill: rgb(195, 200, 213);
+        }
+
+        .l-t {
+            border-top-style: none;
+        }
+
+        .l-l {
+            border-left-style: none;
+        }
+
+        .l-r {
+            border-right-style: none;
+        }
+
+        .l-b {
+            border-bottom-style: none;
+        }
+
+        .l-t.l-l {
+            border-top-left-radius: 10px;
+        }
+
+        .l-t.l-r {
+            border-top-right-radius: 10px;
+        }
+
+        .l-b.l-l {
+            border-bottom-left-radius: 10px;
+        }
+
+        .l-b.l-r {
+            border-bottom-right-radius: 10px;
+        }
+
+        .win-msg {
+            color: rgb(46, 70, 141);
+            font-family: 'Calibri';
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="top-txt">
+        <span>Player: </span>
+        <span id="player">1</span>
+        <span id="piece" class="right-align">X</span>
+        <span class="right-align">Piece: </span>
+    </div>
+
+    <div class="ttt-lines">
+        <div class="boxes l-t l-l" id="ttt-b-1">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes l-t" id="ttt-b-2">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes l-t l-r" id="ttt-b-3">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+
+        </div>
+        <div class="boxes l-l" id="ttt-b-4">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes" id="ttt-b-5">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes l-r" id="ttt-b-6">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes l-l l-b" id="ttt-b-7">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes l-b" id="ttt-b-8">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+        <div class="boxes l-r l-b" id="ttt-b-9">
+            <svg viewBox="0 -4 10 40">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"></text>
+            </svg>
+        </div>
+    </div>
+    <span class="win-msg" id="winMsg"></span>
+
+
+</body>
+<script>
+    var O_P = 'O';
+    var X_P = 'X';
+	var pieceCounter = 0;
+    let spaces = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+    var winTypes = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ]
+    document.querySelectorAll('.boxes').forEach(item => {
+        item.addEventListener('click', event => {
+            //console.log(event.target);
+            if (player.innerHTML == 1) {
+                if (item.querySelector("text").textContent == '') {
+                    item.querySelector("text").textContent = X_P;
+                    spaces[item.id.slice(-1) - 1] = item.querySelector("text").textContent;
+					pieceCounter++;
+                    checkWin();
+                } else {
+                    console.log("piece already there");
+                }
+                piece.innerHTML = "O";
+                player.innerHTML = 2;
+            } else if (player.innerHTML == 2) {
+                if (item.querySelector("text").textContent == '') {
+                    item.querySelector("text").textContent = O_P;
+                    spaces[item.id.slice(-1) - 1] = item.querySelector("text").textContent;
+					pieceCounter++;
+                    checkWin();
+                } else {
+                    console.log("piece already there");
+                }
+                piece.innerHTML = "X";
+                player.innerHTML = 1;
+            } else {
+                console.log("INVALID");
+            }
+            //console.log(spaces);
+        });
+    });
+
+    function checkWin() {
+        for (var i = 0; i < winTypes.length; i++) {
+            if (spaces[winTypes[i][0]] == X_P && spaces[winTypes[i][1]] == X_P && spaces[winTypes[i][2]] == X_P) {
+                console.log("X won");
+                winMsg.innerHTML = "Player 1 (X) won!";
+				setTimeout(window.location.reload.bind(window.location), 1000);
+                break;
+            } else if (spaces[winTypes[i][0]] == O_P && spaces[winTypes[i][1]] == O_P && spaces[winTypes[i][2]] == O_P) {
+                console.log("O won");
+                winMsg.innerHTML = "Player 2 (O) won!";
+				setTimeout(window.location.reload.bind(window.location), 1000);
+                break;
+            } else if (pieceCounter == 9) {
+                console.log("no winner");
+				winMsg.innerHTML = "No Winner •_•";
+				setTimeout(window.location.reload.bind(window.location), 1000);
+                break;
+            }
+        }
+		console.log("Filled Spaces: " + pieceCounter);
+    }
+</script>
+
+</html>
